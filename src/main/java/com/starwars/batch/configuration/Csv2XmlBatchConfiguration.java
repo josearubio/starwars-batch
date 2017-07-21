@@ -1,6 +1,7 @@
 package com.starwars.batch.configuration;
 
 import com.starwars.batch.domain.People;
+import com.starwars.batch.processor.PeopleProcessor;
 import com.sun.xml.internal.ws.message.JAXBAttachment;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -8,6 +9,7 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -63,12 +65,13 @@ public class Csv2XmlBatchConfiguration {
     }
 
     @Bean
-    public Step csvStep(StepBuilderFactory stepBuilderFactory, ItemReader peopleReader, ItemWriter peopleWriter) {
+    public Step csvStep(StepBuilderFactory stepBuilderFactory, ItemReader peopleReader, ItemWriter peopleWriter, PeopleProcessor peopleProcessor) {
         return stepBuilderFactory
                 .get("csvStep")
                 .chunk(10)
                 .reader(peopleReader)
                 .writer(peopleWriter)
+                .processor(peopleProcessor)
                 .build();
     }
 

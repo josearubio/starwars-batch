@@ -23,7 +23,7 @@
     <peoples>
         <birthYear>112BBY</birthYear>
         <eyeColor>yellow</eyeColor>
-        <gender>n/a</gender>
+        <gender>Droid</gender>
         <hairColor>n/a</hairColor>
         <height>167</height>
         <mass>75</mass>
@@ -33,7 +33,7 @@
     <peoples>
         <birthYear>33BBY</birthYear>
         <eyeColor>n/a</eyeColor>
-        <gender>n/a</gender>
+        <gender>Droid</gender>
         <hairColor>white</hairColor>
         <height>96,32</height>
         <mass>red</mass>
