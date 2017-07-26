@@ -1,11 +1,13 @@
 package com.starwars.batch.configuration;
 
 import com.starwars.batch.domain.People;
+import com.starwars.batch.listener.PeopleStepListener;
 import com.starwars.batch.processor.PeopleProcessor;
 import com.starwars.batch.repository.PeopleRepository;
 import com.sun.xml.internal.ws.message.JAXBAttachment;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepListener;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
@@ -23,12 +25,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Created by jaro on 21/07/17.
  */
 @Configuration
 @EnableBatchProcessing
+@EnableScheduling
 public class Csv2XmlBatchConfiguration {
 
     @Bean
@@ -76,10 +80,15 @@ public class Csv2XmlBatchConfiguration {
     }
 
     @Bean
-    public Step csvStep(StepBuilderFactory stepBuilderFactory, ItemReader peopleReader, ItemWriter peopleItemWriter, PeopleProcessor peopleProcessor) {
+    public Step csvStep(StepBuilderFactory stepBuilderFactory,
+                        ItemReader peopleReader,
+                        ItemWriter peopleItemWriter,
+                        PeopleProcessor peopleProcessor,
+                        PeopleStepListener peopleStepListener) {
         return stepBuilderFactory
                 .get("csvStep")
                 .chunk(10)
+                .listener(peopleStepListener)
                 .reader(peopleReader)
                 .writer(peopleItemWriter)
                 .processor(peopleProcessor)
